@@ -28,7 +28,9 @@ else()
     message(STATUS "Using local ${LIB1}")
 endif()
 
-add_executable(block_kuzushi main.c)
+add_executable(block_kuzushi main.c
+        game.h
+        game.c)
 
 # set the include directory
 target_include_directories(block_kuzushi PRIVATE ${raylib_INCLUDE_DIRS})

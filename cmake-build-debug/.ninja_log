@@ -31,3 +31,10 @@
 10	2592	7596856344462127	_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rmodels.c.obj	6a4d951bae5e138d
 7	2708	7596856344421876	_deps/raylib-build/raylib/CMakeFiles/raylib.dir/rcore.c.obj	3581c61033922d6b
 4356	4471	7596856387913615	_deps/raylib-build/raylib/libraylib.a	6dc0f18d556c8ecd
+8	42	7596858435383474	CMakeFiles/block_kuzushi.dir/game.c.obj	c3e2f794ded9161e
+5	52	7596858435353482	CMakeFiles/block_kuzushi.dir/main.c.obj	a340674370ce16a9
+52	183	7596858435824297	block_kuzushi.exe	de19e58b16f4a8ef
+5	46	7596859445577034	CMakeFiles/block_kuzushi.dir/main.c.obj	a340674370ce16a9
+46	164	7596859445993976	block_kuzushi.exe	de19e58b16f4a8ef
+15	103	7596971090502721	CMakeFiles/block_kuzushi.dir/main.c.obj	a340674370ce16a9
+103	387	7596971091392363	block_kuzushi.exe	de19e58b16f4a8ef

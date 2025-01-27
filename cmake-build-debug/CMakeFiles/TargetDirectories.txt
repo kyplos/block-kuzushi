@@ -1,0 +1,3 @@
+C:/Users/kasak/CLionProjects/BlockKuzushi/block-kuzushi/cmake-build-debug/CMakeFiles/block_kuzushi.dir
+C:/Users/kasak/CLionProjects/BlockKuzushi/block-kuzushi/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/kasak/CLionProjects/BlockKuzushi/block-kuzushi/cmake-build-debug/CMakeFiles/rebuild_cache.dir

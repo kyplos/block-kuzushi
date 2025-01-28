@@ -25,6 +25,10 @@ void UpdateGame(GameState *game) {
     if (game->ball.position.y - BALL_RADIUS <= 0 || game->ball.position.y + BALL_RADIUS >= SCREEN_HEIGHT) {
         game->ball.speed.y = -game->ball.speed.y;
     }
+
+    if (CheckCollisionCircleRec(game->ball.position, BALL_RADIUS, game->paddle.rect)) {
+        game->ball.speed.y = -fabsf(game->ball.speed.y);
+    }
 }
 
 void DrawGame(GameState *game) {

@@ -7,6 +7,14 @@ GameState InitGame(void) {
     game.paddle.speed = 8.0f;
     game.ball.position = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     game.ball.speed = (Vector2){5.0f, -5.0f};
+    for (int y = 0; y < BLOCK_ROWS; y++) {
+        for (int x = 0; x < BLOCK_COLUMNS; x++) {
+            game.blocks[y][x].rect = (Rectangle){x * BLOCK_WIDTH + 30, y * BLOCK_HEIGHT + 50, BLOCK_WIDTH, BLOCK_HEIGHT};
+            game.blocks[y][x].durability = 1;
+            game.blocks[y][x].destroyed = false;
+        }
+    }
+
     return game;
 }
 
@@ -29,6 +37,17 @@ void UpdateGame(GameState *game) {
     if (CheckCollisionCircleRec(game->ball.position, BALL_RADIUS, game->paddle.rect)) {
         game->ball.speed.y = -fabsf(game->ball.speed.y);
     }
+
+    for (int y = 0; y < BLOCK_ROWS; y++) {
+        for (int x = 0; x < BLOCK_COLUMNS; x++) {
+            Block *block = &game->blocks[y][x];
+            if (!block->destroyed && CheckCollisionCircleRec(game->ball.position, BALL_RADIUS, block->rect)) {
+                block->destroyed = true;
+                game->ball.speed.y = -game->ball.speed.y;
+            }
+        }
+    }
+
 }
 
 void DrawGame(GameState *game) {
@@ -36,5 +55,15 @@ void DrawGame(GameState *game) {
     ClearBackground(BLACK);
     DrawRectangleRec(game->paddle.rect, BLUE);
     DrawCircleV(game->ball.position, BALL_RADIUS, WHITE);
+
+    for (int y = 0; y < BLOCK_ROWS; y++) {
+        for (int x = 0; x < BLOCK_COLUMNS; x++) {
+            Block *block = &game->blocks[y][x];
+            if (!block->destroyed) {
+                DrawRectangleRec(block->rect, RED);
+            }
+        }
+    }
+
     EndDrawing();
 }

@@ -8,6 +8,16 @@
 #define PADDLE_WIDTH 100
 #define PADDLE_HEIGHT 20
 #define BALL_RADIUS 10
+#define BLOCK_ROWS 5
+#define BLOCK_COLUMNS 12
+#define BLOCK_WIDTH 60
+#define BLOCK_HEIGHT 30
+
+typedef struct Block {
+    Rectangle rect;
+    int durability;
+    bool destroyed;
+} Block;
 
 typedef struct Ball {
     Vector2 position;
@@ -22,6 +32,7 @@ typedef struct Paddle {
 typedef struct GameState {
     Ball ball;
     Paddle paddle;
+    Block blocks[BLOCK_ROWS][BLOCK_COLUMNS];
 } GameState;
 
 GameState InitGame(void);

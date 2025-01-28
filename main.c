@@ -5,10 +5,11 @@ int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Block Kuzushi Game");
     SetTargetFPS(60);
 
+    GameState game = InitGame();
+
     while (!WindowShouldClose()) {
-        BeginDrawing();
-        ClearBackground(BLACK);
-        EndDrawing();
+        UpdateGame(&game);
+        DrawGame(&game);
     }
 
     CloseWindow();

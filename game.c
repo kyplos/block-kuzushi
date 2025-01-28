@@ -1,5 +1,6 @@
 #include "game.h"
 #include "raymath.h"
+#include <stdlib.h>
 
 GameState InitGame(void) {
     GameState game = {0};
@@ -10,7 +11,7 @@ GameState InitGame(void) {
     for (int y = 0; y < BLOCK_ROWS; y++) {
         for (int x = 0; x < BLOCK_COLUMNS; x++) {
             game.blocks[y][x].rect = (Rectangle){x * BLOCK_WIDTH + 30, y * BLOCK_HEIGHT + 50, BLOCK_WIDTH, BLOCK_HEIGHT};
-            game.blocks[y][x].durability = 1;
+            game.blocks[y][x].durability = (rand() % 3) + 1;
             game.blocks[y][x].destroyed = false;
         }
     }
@@ -42,7 +43,10 @@ void UpdateGame(GameState *game) {
         for (int x = 0; x < BLOCK_COLUMNS; x++) {
             Block *block = &game->blocks[y][x];
             if (!block->destroyed && CheckCollisionCircleRec(game->ball.position, BALL_RADIUS, block->rect)) {
-                block->destroyed = true;
+                block->durability--;
+                if (block->durability <= 0) {
+                    block->destroyed = true;
+                }
                 game->ball.speed.y = -game->ball.speed.y;
             }
         }
@@ -60,7 +64,18 @@ void DrawGame(GameState *game) {
         for (int x = 0; x < BLOCK_COLUMNS; x++) {
             Block *block = &game->blocks[y][x];
             if (!block->destroyed) {
-                DrawRectangleRec(block->rect, RED);
+                // Assign block color based on durability
+                Color blockColor = (block->durability == 1) ? RED :
+                                   (block->durability == 2) ? ORANGE : GREEN;
+
+                // Draw block rectangle
+                DrawRectangleRec(block->rect, blockColor);
+
+                // Display block durability as text
+                DrawText(TextFormat("%d", block->durability),
+                         block->rect.x + BLOCK_WIDTH / 2 - 5,
+                         block->rect.y + BLOCK_HEIGHT / 2 - 8,
+                         12, WHITE);
             }
         }
     }

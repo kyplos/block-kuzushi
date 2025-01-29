@@ -12,6 +12,7 @@
 #define BLOCK_COLUMNS 12
 #define BLOCK_WIDTH 60
 #define BLOCK_HEIGHT 30
+#define MAX_POWERUPS 3
 
 typedef struct Block {
     Rectangle rect;
@@ -29,12 +30,18 @@ typedef struct Paddle {
     float speed;
 } Paddle;
 
+typedef struct PowerUp {
+    Rectangle rect;
+    bool active;
+} PowerUp;
+
 typedef struct GameState {
     Ball ball;
     Paddle paddle;
     Block blocks[BLOCK_ROWS][BLOCK_COLUMNS];
     int lives;
     int score;
+    PowerUp powerUps[MAX_POWERUPS];
 } GameState;
 
 GameState InitGame(void);

@@ -19,6 +19,10 @@ GameState InitGame(void) {
     game.lives = 3;
     game.score = 0;
 
+    for (int i = 0; i < MAX_POWERUPS; i++) {
+        game.powerUps[i].active = false;
+    }
+
     return game;
 }
 
@@ -50,6 +54,17 @@ void UpdateGame(GameState *game) {
                 if (block->durability <= 0) {
                     block->destroyed = true;
                     game->score += 10; // Add score
+
+                    // 20% chance to spawn power-up
+                    if (rand() % 5 == 0) {
+                        for (int i = 0; i < MAX_POWERUPS; i++) {
+                            if (!game->powerUps[i].active) {
+                                game->powerUps[i].rect = (Rectangle){block->rect.x + BLOCK_WIDTH / 4, block->rect.y + BLOCK_HEIGHT / 4, BLOCK_WIDTH / 2, BLOCK_HEIGHT / 2};
+                                game->powerUps[i].active = true;
+                                break;
+                            }
+                        }
+                    }
                 }
                 game->ball.speed.y = -game->ball.speed.y;
             }
@@ -61,6 +76,18 @@ void UpdateGame(GameState *game) {
         if (game->lives > 0) {
             game->ball.position = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
             game->ball.speed = (Vector2){5.0f, -5.0f};
+        }
+    }
+
+    for (int i = 0; i < MAX_POWERUPS; i++) {
+        if (game->powerUps[i].active) {
+            game->powerUps[i].rect.y += 2; // Fall speed
+            if (CheckCollisionRecs(game->powerUps[i].rect, game->paddle.rect)) {
+                game->lives = (game->lives < 5) ? game->lives + 1 : 5; // Add life
+                game->powerUps[i].active = false;
+            } else if (game->powerUps[i].rect.y > SCREEN_HEIGHT) {
+                game->powerUps[i].active = false; // Deactivate if out of screen
+            }
         }
     }
 
@@ -94,6 +121,12 @@ void DrawGame(GameState *game) {
 
     DrawText(TextFormat("Lives: %d", game->lives), 10, 10, 20, WHITE);
     DrawText(TextFormat("Score: %d", game->score), SCREEN_WIDTH - 150, 10, 20, WHITE);
+
+    for (int i = 0; i < MAX_POWERUPS; i++) {
+        if (game->powerUps[i].active) {
+            DrawRectangleRec(game->powerUps[i].rect, YELLOW);
+        }
+    }
 
     EndDrawing();
 }

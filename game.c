@@ -16,6 +16,9 @@ GameState InitGame(void) {
         }
     }
 
+    game.lives = 3;
+    game.score = 0;
+
     return game;
 }
 
@@ -46,9 +49,18 @@ void UpdateGame(GameState *game) {
                 block->durability--;
                 if (block->durability <= 0) {
                     block->destroyed = true;
+                    game->score += 10; // Add score
                 }
                 game->ball.speed.y = -game->ball.speed.y;
             }
+        }
+    }
+
+    if (game->ball.position.y + BALL_RADIUS >= SCREEN_HEIGHT) {
+        game->lives--;
+        if (game->lives > 0) {
+            game->ball.position = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+            game->ball.speed = (Vector2){5.0f, -5.0f};
         }
     }
 
@@ -79,6 +91,9 @@ void DrawGame(GameState *game) {
             }
         }
     }
+
+    DrawText(TextFormat("Lives: %d", game->lives), 10, 10, 20, WHITE);
+    DrawText(TextFormat("Score: %d", game->score), SCREEN_WIDTH - 150, 10, 20, WHITE);
 
     EndDrawing();
 }

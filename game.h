@@ -33,6 +33,8 @@ typedef struct GameState {
     Ball ball;
     Paddle paddle;
     Block blocks[BLOCK_ROWS][BLOCK_COLUMNS];
+    int lives;
+    int score;
 } GameState;
 
 GameState InitGame(void);

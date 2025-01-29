@@ -42,6 +42,7 @@ typedef struct GameState {
     int lives;
     int score;
     PowerUp powerUps[MAX_POWERUPS];
+    bool gameOver;
 } GameState;
 
 GameState InitGame(void);

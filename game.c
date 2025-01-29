@@ -2,6 +2,15 @@
 #include "raymath.h"
 #include <stdlib.h>
 
+bool CheckWinCondition(GameState *game) {
+    for (int y = 0; y < BLOCK_ROWS; y++) {
+        for (int x = 0; x < BLOCK_COLUMNS; x++) {
+            if (!game->blocks[y][x].destroyed) return false;
+        }
+    }
+    return true;
+}
+
 GameState InitGame(void) {
     GameState game = {0};
     game.paddle.rect = (Rectangle){SCREEN_WIDTH / 2 - PADDLE_WIDTH / 2, SCREEN_HEIGHT - 50, PADDLE_WIDTH, PADDLE_HEIGHT};
@@ -27,6 +36,9 @@ GameState InitGame(void) {
 }
 
 void UpdateGame(GameState *game) {
+
+    if (game->gameOver || CheckWinCondition(game)) return;
+
     // Paddle movement
     if (IsKeyDown(KEY_LEFT) && game->paddle.rect.x > 0) game->paddle.rect.x -= game->paddle.speed;
     if (IsKeyDown(KEY_RIGHT) && game->paddle.rect.x < SCREEN_WIDTH - PADDLE_WIDTH) game->paddle.rect.x += game->paddle.speed;
@@ -73,7 +85,10 @@ void UpdateGame(GameState *game) {
 
     if (game->ball.position.y + BALL_RADIUS >= SCREEN_HEIGHT) {
         game->lives--;
-        if (game->lives > 0) {
+        if (game->lives <= 0) {
+            game->gameOver = true;
+            return;
+        } else {
             game->ball.position = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
             game->ball.speed = (Vector2){5.0f, -5.0f};
         }
@@ -91,11 +106,30 @@ void UpdateGame(GameState *game) {
         }
     }
 
+    if (CheckWinCondition(game)) {
+        game->lives = -1; // Flag for win
+        return;
+    }
+
 }
 
 void DrawGame(GameState *game) {
+
     BeginDrawing();
     ClearBackground(BLACK);
+
+    if (game->gameOver) {
+        DrawText("GAME OVER!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 20, WHITE);
+        EndDrawing();
+        return;
+    }
+
+    if (game->lives == -1) {
+        DrawText("YOU WON!!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 20, WHITE);
+        EndDrawing();
+        return;
+    }
+
     DrawRectangleRec(game->paddle.rect, BLUE);
     DrawCircleV(game->ball.position, BALL_RADIUS, WHITE);
 
